@@ -1,0 +1,14 @@
+# Игнор видосов
+*.mp4
+
+# Игнор архивов
+*.zip
+*.tgz
+
+# Игнор моделей
+*.ckpt
+*.pth
+
+*.DS_Store
+*.ipynb_checkpoints
+*.virtual_documents

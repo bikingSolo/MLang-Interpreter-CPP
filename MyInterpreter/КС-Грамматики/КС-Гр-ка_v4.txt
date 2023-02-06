@@ -1,0 +1,37 @@
+P --> program { S O Op}
+
+S --> {{ struct LEX_ID { O }; }}   - структура 
+
+O --> {{ [[ int|string|bool|struct LEX_ID ]] [[ LEX_ID|LEX_ID = C ]] {{ , [[ LEX_ID|LEX_ID = C ]] }}; }}   - раздел Описаний
+
+C --> [+|-] LEX_NUM | LEX_LINE | LEX_TRUE | LEX_FALSE   - контсанты
+
+Op -->                           - операторы 
+   if ( A ) Op else Op 
+|  for ( [ A ]; [ A ]; [ A ] ) Op
+|  while ( A ) Op
+|  break;
+|  goto LEX_ID;
+|  read ( F );
+|  write ( A {{ , A }} );
+|  {  {{ Op }}  }                                      - составной оператор 
+|  LEX_ID : Op                                         - помеченный оператор 
+|  A;                                                  - оператор выражение  
+|  F;                                                  - доступ к полям структуры
+ 
+Ops --> {{ Op }}
+
+F --> LEX_ID {{ . LEX_ID }}
+
+Выражение - чем ниже, тем выше приоритет:
+
+A  --> F = A | B
+B  --> B1 {{ or B1 }}        
+B1  --> B2 {{ and B2 }}
+B2  --> B3 [[ <|>|<=|>=|==|!= ]] B3 | B3
+B3  --> B4 {{ [[ +|- ]] B4 }}
+B4  --> B5 {{ [[ *|/ ]] B5 }}
+B5  --> C | F | not B5 | -B5 | ( A )
+
+
+( F в случае простого LEX_ID ничего не делает, иначе проверяет все операции . и останавливается на  последнем LEX_ID )

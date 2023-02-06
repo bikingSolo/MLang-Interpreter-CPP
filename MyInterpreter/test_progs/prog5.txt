@@ -1,0 +1,10 @@
+program
+{
+    int a;
+    string c;
+    a = 5 + ( a = 1 );
+    c = "fgfgfgfgf" + (c = "erererer");
+    write(c);
+    write(a);
+
+}

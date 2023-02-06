@@ -1,0 +1,36 @@
+program
+{   
+    struct a
+    {
+        int c = 3;
+        string b ;
+    };
+
+    struct b
+    {
+        int b;
+        string s = "abcd";
+    };
+
+    struct a i, t, k;
+    struct b g;
+
+    g = i; 
+
+    for( i.c = 0; i.c < 5; i.c = i.c + 1)
+    {
+        if( i.c  ==  3)  break;
+        else write(i.c);
+    }
+
+    read(i);
+    read(k);
+   
+
+    write(k, i);
+
+    write( "test" );
+    write( t = k = i );
+
+
+} 

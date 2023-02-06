@@ -1,0 +1,59 @@
+P --> program { S O Op}
+
+S --> {{ struct LEX_ID { O }; }}   - структура 
+
+O --> {{ [[ int|string|bool|struct LEX_ID ]] [[ 
+    LEX_ID|LEX_ID < poliz.push_back(Lex(POLIZ_ADDRESS,c_val)) > = C < poliz.push_back(Lex(LEX_ASSIGN)) > ]] 
+    {{ , [[ LEX_ID|LEX_ID = C ]] }}; }}   - раздел Описаний
+
+C --> [+|-] LEX_NUM | LEX_LINE | LEX_TRUE | LEX_FALSE  < poliz.push_back(curr_lex) >  - контсанты
+
+Op -->                           - операторы 
+
+   if ( A <pl2 = ploiz.size(); poliz.push_back(Lex()); poliz.push_back(Lex(POLIZ_FGO));> ) 
+   Op <pl3 = poliz.size(); poliz.push_back(Lex()); poliz.push_back(Lex(POLIZ_GO)); poliz[pl2] = Lex(POLIZ_LABEL, poliz.size());>
+   else Op <poliz[pl3] = Lex(POLIZ_LABEL, poliz.size());>
+
+|  for ( [ A < poliz.push_back(Lex(LEX_SEMICOLON)); pl0 = poliz.size(); >];  
+
+ [ A < pl1 = poliz.size(); poliz.push_back(Lex()); poliz.push_back(Lex(POLIZ_FGO)); pl2 = poliz.size(); poliz.push_back(Lex()); poliz.push_back(Lex(POLIZ_GO)); > ]; 
+
+ [ A < poliz.push_back(Lex(LEX_SEMICOLON)); poliz.push_back(Lex(POLIZ_LABEL, pl0)); poliz.push_back(Lex(POLIZ_GO)); poliz[pl2] = Lex(POLIZ_LABEL, poliz.size()); > ] ) 
+
+ Op < poliz.push_back(Lex(POLIZ_LABEL, pl2+2)); poliz.push_back(Lex(POLIZ_GO)); poliz[pl1] = Lex(POLIZ_LABEL, poliz.size());  >
+
+|  while ( <pl0 = poliz.size();> A <pl1 = poliz.size(); poliz.push_back(Lex()); poliz.push_back(Lex(POLIZ_FGO));> ) 
+   Op <poliz.push_back(Lex(POLIZ_LABEL, pl0)); poliz.push_back(Lex(POLIZ_GO)); poliz[pl1] = Lex(POLIZ_LABEL, poliz.size());>
+
+|  break;   
+
+|  goto LEX_ID;     <poliz.push_back(Lex(POLIZ_LABEL, TID[c_val].get_label())); poliz.push_back(Lex(POLIZ_GO)); >
+
+|  read ( LEX_ID < poliz.push_back(Lex(POLIZ_ADDRESS, c_val))> ); <poliz.push_back(Lex(LEX_READ))>  
+
+|  write ( A <poliz.push_back(Lex(LEX_WRITE))> {{ , A <poliz.push_back(Lex(LEX_WRITE))> }} ); 
+
+|  {  {{ Op }}  }                                                   
+
+|  LEX_ID < TID[c_val].put_label(poliz.size());> : Op                                     
+
+|  A;                                                            
+
+|  F;                                                           
+ 
+Ops --> {{ Op }}
+
+F --> LEX_ID < poliz.push_back(Lex(POLIZ_ADDRESS,c_val)); > {{ . LEX_ID < poliz.push_back(POLIZ_ADDRESS,c_val); poliz.push_back(LEX_DOT); >  }}
+
+Выражение - чем ниже, тем выше приоритет:
+
+A  --> F = A < poliz.push_back(Lex(LEX_ASSIGN)) > | B
+B  --> B1 {{ or B1 }}        
+B1  --> B2 {{ and B2 }}
+B2  --> B3 [[ <|>|<=|>=|==|!= ]] B3 | B3
+B3  --> B4 {{ [[ +|- ]] B4 }}
+B4  --> B5 {{ [[ *|/ ]] B5 }}
+B5  --> C | F | not B5 | -B5 | ( A )
+
+
+( F в случае простого LEX_ID ничего не делает, иначе проверяет все операции . и останавливается на  последнем LEX_ID )

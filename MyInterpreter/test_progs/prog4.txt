@@ -1,0 +1,21 @@
+program
+{
+    int a = 6, c;
+    string s = "abcd";
+
+    for( ; true;  )
+    {
+        while(true)
+        {
+            a = a + 1;
+            break;
+        }
+        a = a + 1;
+        break;
+    }
+    break;
+
+    write(a);
+
+
+}
